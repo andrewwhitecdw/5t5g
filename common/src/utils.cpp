@@ -78,7 +78,7 @@ void check_all_ports_link_status(uint32_t port_mask)
 	for (count = 0; count <= MAX_CHECK_TIME; count++) {
 		all_ports_up = 1;
 		RTE_ETH_FOREACH_DEV(portid) {
-			if ((port_mask & (1 << portid)) == 0)
+			if (portid >= 32 || (port_mask & (1u << portid)) == 0)
 				continue;
 			memset(&link, 0, sizeof(link));
 			rte_eth_link_get_nowait(portid, &link);
@@ -91,7 +91,7 @@ void check_all_ports_link_status(uint32_t port_mask)
 					     (link.link_duplex ==
 					      ETH_LINK_FULL_DUPLEX)
 					     ? ("full-duplex")
-					     : ("half-duplex\n"));
+					     : ("half-duplex"));
 				else
 					printf("Port %d Link Down\n", portid);
 				continue;
@@ -136,7 +136,7 @@ uint64_t get_timestamp_ns(void)
 {
     struct timespec t;
     int             ret;
-    ret = clock_gettime(CLOCK_REALTIME, &t);
+    ret = clock_gettime(CLOCK_MONOTONIC, &t);
     if(ret != 0)
 	{
     	fprintf(stderr, "clock_gettime failed\n");
