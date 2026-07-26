@@ -24,7 +24,7 @@ __global__ void kernel_check_ecpri_flow(uintptr_t * addr, int num_pkts, uint32_t
                                     uint32_t * status, uint16_t ap0, uint16_t ap1, uint16_t ap2, uint16_t ap3)
 {
     int idx = blockIdx.x * blockDim.x + threadIdx.x;
-    uint8_t flow_id;
+    uint16_t flow_id;
 
     if (idx < num_pkts) {
         flow_id = oran_umsg_get_flowid((((uint8_t *) (addr[idx]))));
@@ -37,7 +37,7 @@ __global__ void kernel_check_ecpri_flow(uintptr_t * addr, int num_pkts, uint32_t
             good[idx] = 1;
 
 #ifdef DEBUG_PRINT
-		printf("flowId: %d, ap0: %d, ap1: %d, ap2: %d, ap3: %d\n", flowId, ap0, ap1, ap2, ap3);
+		printf("flow_id: %d, ap0: %d, ap1: %d, ap2: %d, ap3: %d\n", flow_id, ap0, ap1, ap2, ap3);
 #endif
 
 	}
