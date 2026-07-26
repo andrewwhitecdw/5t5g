@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef COSTANTS_H
-#define COSTANTS_H
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
 
 #include <stdio.h>
 #include <stdlib.h>
