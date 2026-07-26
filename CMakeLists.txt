@@ -93,9 +93,13 @@ execute_process(WORKING_DIRECTORY ${DPDK_PATH}
         )
 
 # Set RTE_PKTMBUF_HEADROOM to 0 for GPU memory best performance
-execute_process(WORKING_DIRECTORY ${DPDK_PATH}
+execute_process(WORKING_DIRECTORY ${DPDK_TARGET_PATH}
         COMMAND sed -ri "s,(RTE_PKTMBUF_HEADROOM ).*,\\10," config/rte_config.h
+        RESULT_VARIABLE DPDK_SED_RET
 )
+if(NOT DPDK_SED_RET EQUAL 0)
+    message(FATAL_ERROR "Failed to patch DPDK RTE_PKTMBUF_HEADROOM")
+endif()
 
 add_custom_target(${DPDK_TARGET} ALL
         WORKING_DIRECTORY ${DPDK_TARGET_PATH}
