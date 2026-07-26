@@ -126,6 +126,7 @@ RURecv::RURecv(int _index, struct rte_ether_addr &_eth_addr, uint16_t _ap0,
 {
 	good_pkts = 0;
 	bad_pkts = 0;
+	memset(frule, 0, sizeof(frule));
 
 	CUDA_CHECK(cudaMallocHost((void **)&burst_list, MAX_BURSTS_X_PIPELINE * sizeof(struct burst_item)));
 
@@ -155,5 +156,7 @@ RURecv::~RURecv() {
 void RURecv::setFlowRule() {
 	for (int iqueue = 0; iqueue < NUM_AP; iqueue++) {
 		frule[iqueue] = setup_rules(port_id, vlan_tci, rxq_list[iqueue], eth_addr, ECPRI_MSG_TYPE_IQ, eAxC_list[iqueue]);
+		if (frule[iqueue] == NULL)
+			rte_panic("Failed to create flow rule for queue %d\n", iqueue);
 	}
 }
