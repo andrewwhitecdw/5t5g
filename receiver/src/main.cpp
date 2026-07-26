@@ -84,7 +84,8 @@ RURecv * ru1;
 static void signal_handler(int signum)
 {
     if (signum == SIGINT || signum == SIGTERM || signum == SIGUSR1) {
-        printf("\n\nSignal %d received, preparing to exit...\n", signum);
+        const char msg[] = "\n\nSignal received, preparing to exit...\n";
+        write(STDOUT_FILENO, msg, sizeof(msg) - 1);
         ACCESS_ONCE(force_quit) = 1;
     }
 }
