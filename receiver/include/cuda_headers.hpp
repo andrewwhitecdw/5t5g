@@ -65,6 +65,7 @@
   #define POP_RANGE do { nvtxRangePop(); } while(0)
 #else
   #define PUSH_RANGE(name,cid)
+  #define PUSH_RANGE_STR(cid, FMT, ARGS...) do { } while(0)
   #define POP_RANGE
 #endif
 
