@@ -63,13 +63,6 @@ static struct rte_flow *setup_rules(uint16_t port_id, uint16_t vlan_tci,
 		eth_mask.src.addr_bytes[4] = 0xFF;
 		eth_mask.src.addr_bytes[5] = 0xFF;
 
-		eth_mask.dst.addr_bytes[0] = 0x0;
-		eth_mask.dst.addr_bytes[1] = 0x0;
-		eth_mask.dst.addr_bytes[2] = 0x0;
-		eth_mask.dst.addr_bytes[3] = 0x0;
-		eth_mask.dst.addr_bytes[4] = 0x0;
-		eth_mask.dst.addr_bytes[5] = 0x0;
-
 		ecpri_spec.hdr.common.type = ECPRI_MSG_TYPE_IQ;
 
 		ecpri_spec.hdr.type0.pc_id = rte_cpu_to_be_16(flow);
