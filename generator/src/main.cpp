@@ -421,7 +421,7 @@ int main(int argc, char **argv)
     if (ret != 0)
         rte_exit(EXIT_FAILURE, "rte_eth_dev_start:err=%d, port=%u\n", ret, conf_port_id);
 
-    check_all_ports_link_status(conf_enabled_port_mask);
+    check_all_ports_link_status(1u << conf_port_id);
 
     uint32_t bytes_per_pkt = ORAN_IQ_HDR_SZ + (PRBS_PER_PACKET * PRB_SIZE(IQ_SAMPLE_SIZE));
     uint32_t bytes_per_interval_0 = ru0->tx_interval_pkts * bytes_per_pkt;
