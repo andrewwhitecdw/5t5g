@@ -38,7 +38,7 @@ static int conf_nb_txd                  = DEF_TX_DESC;
 static const char short_options[] = 
     "g:" /* GPU device */
     "h"	 /* help */
-    "n:" /* NVTX Profiler */
+    "n"	 /* NVTX Profiler */
     ;
 
 ////////////////////////////////////////////////////////////////////////
@@ -137,7 +137,11 @@ static int parse_args(int argc, char **argv)
     int option_index;
     char *prgname = argv[0];
     int totDevs;
-    cudaError_t cuda_ret = cudaSuccess;
+    cudaError_t cuda_ret = cudaGetDeviceCount(&totDevs);
+    if (cuda_ret != cudaSuccess) {
+        fprintf(stderr, "Cannot get CUDA device count\n");
+        return -1;
+    }
     argvopt = argv;
 
     while ((opt = getopt_long(argc, argvopt, short_options, NULL, &option_index)) != EOF)
@@ -177,8 +181,8 @@ static int parse_args(int argc, char **argv)
 
     if ( ((conf_num_pipelines * 2) + 1) > (int)rte_lcore_count()) {
         fprintf(stderr,
-            "Required conf_num_pipelines+1 (%d), cores launched=(%d)\n",
-            conf_num_pipelines + 1, rte_lcore_count());
+            "Required conf_num_pipelines*2+1 (%d), cores launched=(%d)\n",
+            (conf_num_pipelines * 2) + 1, rte_lcore_count());
         return -1;
     }
 
@@ -477,7 +481,7 @@ int main(int argc, char **argv)
            conf_ports_eth_addr[conf_port_id].addr_bytes[5]
         );
 
-    check_all_ports_link_status(conf_enabled_port_mask);
+    check_all_ports_link_status(1u << conf_port_id);
 
     if (conf_nvprofiler)
         cudaProfilerStart();
